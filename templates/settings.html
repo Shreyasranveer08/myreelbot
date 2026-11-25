@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}— Settings{% endblock %}
+{% block content %}
+<h2 class="fw-bold mb-1">⚙️ Settings</h2>
+<p class="text-muted mb-4">Instagram account aur bot settings</p>
+
+<div style="max-width:600px;">
+    <div class="card p-4 mb-4">
+        <h5 class="fw-bold mb-3"><i class="fab fa-instagram me-2" style="color:#ec4899;"></i>Instagram Account</h5>
+        <form method="POST">
+            <div class="mb-3">
+                <label class="form-label">Instagram Username</label>
+                <input type="text" name="ig_username" class="form-control" value="{{ cfg.get('ig_username','') }}" placeholder="@yourhandle">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Instagram Password</label>
+                <input type="password" name="ig_password" class="form-control" value="{{ cfg.get('ig_password','') }}" placeholder="Password">
+                <small class="text-muted">🔒 Password sirf aapke device par save hota hai</small>
+            </div>
+            <div class="mb-4">
+                <label class="form-label">Comment Check Interval (seconds)</label>
+                <input type="number" name="poll_interval" class="form-control" value="{{ cfg.get('poll_interval','30') }}" min="10" max="300">
+                <small class="text-muted">Kitne seconds mein naye comments check karein (30 recommended)</small>
+            </div>
+            <button type="submit" class="btn btn-primary">💾 Save Settings</button>
+        </form>
+    </div>
+
+    <div class="card p-4">
+        <h5 class="fw-bold mb-3">🤖 Bot Control</h5>
+        <div class="d-flex gap-3">
+            <a href="{{ url_for('start_bot') }}" class="btn btn-success">🚀 Start Bot</a>
+            <a href="{{ url_for('stop_bot') }}" class="btn btn-danger">⛔ Stop Bot</a>
+        </div>
+        <small class="text-muted mt-2 d-block">Bot start hone se pehle Instagram credentials save karo!</small>
+    </div>
+</div>
+{% endblock %}

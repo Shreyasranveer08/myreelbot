@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}— New Automation{% endblock %}
+{% block content %}
+<div class="mb-4">
+    <a href="{{ url_for('automations') }}" class="text-muted text-decoration-none">← Back</a>
+    <h2 class="fw-bold mt-2">⚡ New Automation</h2>
+    <p class="text-muted">Comment-to-DM automation setup karo</p>
+</div>
+
+<div class="card p-4" style="max-width:700px;">
+    <form method="POST">
+        <div class="mb-4">
+            <label class="form-label fw-semibold">Automation Name</label>
+            <input type="text" name="name" class="form-control" placeholder="e.g. Reel Link Sender" required>
+            <small class="text-muted">Apni marzi ka naam rakho</small>
+        </div>
+
+        <div class="mb-4">
+            <label class="form-label fw-semibold">🎯 Trigger Keyword</label>
+            <input type="text" name="keyword" class="form-control" placeholder="e.g. LINK, SEND, INFO">
+            <small class="text-muted">Yeh word comment mein aane par DM jayega. <strong>Khali choddo = har comment par DM</strong></small>
+        </div>
+
+        <div class="mb-4">
+            <label class="form-label fw-semibold">🔗 Link Jo Bhejna Hai</label>
+            <input type="url" name="link" class="form-control" placeholder="https://yourwebsite.com" required>
+            <small class="text-muted">YouTube, website, WhatsApp, kuch bhi</small>
+        </div>
+
+        <div class="mb-4">
+            <label class="form-label fw-semibold">📩 DM Message Template</label>
+            <textarea name="dm_message" class="form-control" rows="3" placeholder="Hey! Here is the link: {link} 🚀">Hey @{username}! Yeh raha tumhara link: {link} 🚀\nKoi sawaal ho to batao!</textarea>
+            <small class="text-muted"><code>{link}</code> → automatically aapka link, <code>{username}</code> → user ka naam</small>
+        </div>
+
+        <div class="mb-4">
+            <label class="form-label fw-semibold">💬 Public Comment Reply (Optional)</label>
+            <input type="text" name="reply_comment" class="form-control" value="Check your DM! Sent you the link ✅">
+            <small class="text-muted">Comment ke neeche yeh reply ayega publicly</small>
+        </div>
+
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary px-4">✅ Create Automation</button>
+            <a href="{{ url_for('automations') }}" class="btn btn-outline-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

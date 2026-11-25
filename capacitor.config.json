@@ -1,0 +1,13 @@
+{
+  "appId": "com.spotfree.app",
+  "appName": "SpotFree",
+  "webDir": "public",
+  "bundledWebRuntime": false,
+  "server": {
+    "androidScheme": "https",
+    "cleartext": true
+  },
+  "android": {
+    "allowMixedContent": true
+  }
+}

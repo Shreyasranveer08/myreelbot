@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}— Automations{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-1">⚡ Automations</h2>
+        <p class="text-muted mb-0">Apne comment-to-DM automations manage karo</p>
+    </div>
+    <a href="{{ url_for('create_automation') }}" class="btn btn-primary">
+        <i class="fas fa-plus me-2"></i>New Automation
+    </a>
+</div>
+
+{% if automations %}
+<div class="row g-3">
+    {% for auto in automations %}
+    <div class="col-12">
+        <div class="card p-4">
+            <div class="d-flex justify-content-between align-items-start">
+                <div class="flex-grow-1">
+                    <div class="d-flex align-items-center gap-3 mb-2">
+                        <h5 class="fw-bold mb-0">{{ auto['name'] }}</h5>
+                        <span class="{% if auto['active'] %}badge-active{% else %}badge-off{% endif %}">
+                            {% if auto['active'] %}● Active{% else %}○ Off{% endif %}
+                        </span>
+                    </div>
+                    <div class="row g-3 mt-1">
+                        <div class="col-md-3">
+                            <small class="text-muted d-block">🎯 Trigger Keyword</small>
+                            <code style="color:#a855f7;">{{ auto['keyword'] or 'Any comment' }}</code>
+                        </div>
+                        <div class="col-md-4">
+                            <small class="text-muted d-block">🔗 Link</small>
+                            <span class="text-truncate d-block" style="max-width:250px; color:#10b981;">{{ auto['link'] }}</span>
+                        </div>
+                        <div class="col-md-2">
+                            <small class="text-muted d-block">📊 Triggered</small>
+                            <strong>{{ auto['triggered_count'] }} times</strong>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <small class="text-muted">💬 DM: </small>
+                        <small style="color:#94a3b8;">{{ auto['dm_message'][:80] }}...</small>
+                    </div>
+                </div>
+                <div class="d-flex gap-2 ms-3">
+                    <a href="{{ url_for('toggle_automation', auto_id=auto['id']) }}"
+                       class="btn btn-sm {% if auto['active'] %}btn-warning{% else %}btn-success{% endif %}">
+                        {% if auto['active'] %}⏸ Pause{% else %}▶ Resume{% endif %}
+                    </a>
+                    <a href="{{ url_for('delete_automation', auto_id=auto['id']) }}"
+                       class="btn btn-sm btn-outline-danger"
+                       onclick="return confirm('Delete karna hai?')">🗑</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="card">
+    <div class="text-center py-5">
+        <div style="font-size:4rem;">⚡</div>
+        <h4 class="mt-3 fw-bold">Koi Automation Nahi Hai Abhi</h4>
+        <p class="text-muted">Apna pehla comment-to-DM automation banao!</p>
+        <a href="{{ url_for('create_automation') }}" class="btn btn-primary btn-lg mt-2">
+            <i class="fas fa-plus me-2"></i>Automation Banao
+        </a>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

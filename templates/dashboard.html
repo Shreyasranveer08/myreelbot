@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+{% block title %}— Dashboard{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-1">Dashboard</h2>
+        <p class="text-muted mb-0">Hello, {{ session.username }}! 👋</p>
+    </div>
+    <div class="d-flex gap-2 align-items-center">
+        <span class="bot-status {% if bot_running %}bot-on{% else %}bot-off{% endif %}">
+            <i class="fas fa-circle me-1" style="font-size:0.6rem;"></i>
+            Bot {% if bot_running %}Running{% else %}Stopped{% endif %}
+        </span>
+        {% if bot_running %}
+            <a href="{{ url_for('stop_bot') }}" class="btn btn-sm btn-danger">⛔ Stop Bot</a>
+        {% else %}
+            <a href="{{ url_for('start_bot') }}" class="btn btn-sm btn-primary">🚀 Start Bot</a>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Stats -->
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="stat-card">
+            <div class="d-flex align-items-center gap-3 mb-2">
+                <div style="background:rgba(124,58,237,0.2);padding:12px;border-radius:12px;">
+                    <i class="fas fa-bolt" style="color:#7c3aed;font-size:1.3rem;"></i>
+                </div>
+                <span class="text-muted">Active Automations</span>
+            </div>
+            <div class="number">{{ total_automations }}</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-card">
+            <div class="d-flex align-items-center gap-3 mb-2">
+                <div style="background:rgba(16,185,129,0.2);padding:12px;border-radius:12px;">
+                    <i class="fas fa-paper-plane" style="color:#10b981;font-size:1.3rem;"></i>
+                </div>
+                <span class="text-muted">DMs Sent</span>
+            </div>
+            <div class="number">{{ total_dms_sent }}</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-card">
+            <div class="d-flex align-items-center gap-3 mb-2">
+                <div style="background:rgba(236,72,153,0.2);padding:12px;border-radius:12px;">
+                    <i class="fas fa-users" style="color:#ec4899;font-size:1.3rem;"></i>
+                </div>
+                <span class="text-muted">Total Contacts</span>
+            </div>
+            <div class="number">{{ total_contacts }}</div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="row g-3 mb-4">
+    <div class="col-md-6">
+        <div class="card p-4" style="cursor:pointer;border: 2px dashed #7c3aed;" onclick="window.location='{{ url_for('create_automation') }}'">
+            <div class="d-flex align-items-center gap-3">
+                <div style="background:rgba(124,58,237,0.2);padding:16px;border-radius:12px;font-size:1.5rem;">⚡</div>
+                <div>
+                    <h5 class="mb-1 fw-bold">Auto-DM from Comments</h5>
+                    <p class="text-muted mb-0 small">Keyword comment karo → User ko automatic DM</p>
+                    <span class="badge" style="background:#7c3aed;margin-top:6px;">POPULAR</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card p-4">
+            <div class="d-flex align-items-center gap-3">
+                <div style="background:rgba(236,72,153,0.2);padding:16px;border-radius:12px;font-size:1.5rem;">📊</div>
+                <div>
+                    <h5 class="mb-1 fw-bold">Total Triggered Today</h5>
+                    <p class="text-muted mb-0 small">{{ total_dms_sent }} DMs successfully bheji gayi</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Activity -->
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0 fw-bold"><i class="fas fa-list me-2" style="color:#7c3aed;"></i>Recent Activity</h5>
+        <a href="{{ url_for('logs') }}" class="btn btn-sm btn-outline-secondary">Sab dekho →</a>
+    </div>
+    <div id="live-log">
+        {% if recent_logs %}
+            {% for log in recent_logs %}
+            <div class="log-item log-{{ log['action'] }}">
+                <div class="d-flex justify-content-between">
+                    <span>
+                        {% if log['action'] == 'dm_sent' %}✅{% elif log['action'] == 'comment' %}💬{% elif log['action'] == 'error' %}❌{% else %}ℹ️{% endif %}
+                        <strong>@{{ log['username'] }}</strong> — {{ log['message'] }}
+                    </span>
+                    <small class="text-muted">{{ log['created_at'] }}</small>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="text-center py-5 text-muted">
+                <i class="fas fa-robot fa-3x mb-3" style="color:#2d2d4e;"></i>
+                <p>Bot start karo — activity yahan dikhegi! 🚀</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Auto-refresh logs every 10 seconds
+setInterval(() => {
+    fetch('/api/logs').then(r => r.json()).then(logs => {
+        const icons = {dm_sent:'✅', comment:'💬', error:'❌'};
+        const container = document.getElementById('live-log');
+        if(logs.length === 0) return;
+        container.innerHTML = logs.map(l =>
+            `<div class="log-item log-${l.action}">
+                <div class="d-flex justify-content-between">
+                    <span>${icons[l.action]||'ℹ️'} <strong>@${l.username}</strong> — ${l.message}</span>
+                    <small class="text-muted">${l.created_at}</small>
+                </div>
+            </div>`
+        ).join('');
+    });
+}, 10000);
+</script>
+{% endblock %}

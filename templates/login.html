@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MyReelBot — Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: #0f0f1a; color: #e2e8f0; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+        .login-card { background: #1a1a2e; border: 1px solid #2d2d4e; border-radius: 20px; padding: 40px; width: 100%; max-width: 420px; }
+        .logo { font-size: 1.8rem; font-weight: 800; background: linear-gradient(135deg, #7c3aed, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .form-control { background: #0f0f1a; border: 1px solid #2d2d4e; color: #e2e8f0; border-radius: 10px; padding: 12px; }
+        .form-control:focus { background: #0f0f1a; border-color: #7c3aed; color: #e2e8f0; box-shadow: 0 0 0 3px rgba(124,58,237,0.2); }
+        .btn-primary { background: linear-gradient(135deg, #7c3aed, #a855f7); border: none; padding: 12px; border-radius: 10px; font-weight: 600; }
+        .btn-primary:hover { background: linear-gradient(135deg, #6d28d9, #9333ea); }
+    </style>
+</head>
+<body>
+<div class="login-card">
+    <div class="text-center mb-4">
+        <div style="font-size:3rem;">🤖</div>
+        <div class="logo">MyReelBot</div>
+        <p class="text-muted mt-2">ManyChat jaisa — Bilkul FREE!</p>
+    </div>
+    <form method="POST">
+        <div class="mb-3">
+            <label class="form-label">Instagram Username</label>
+            <input type="text" name="username" class="form-control" placeholder="@yourhandle" required>
+        </div>
+        <div class="mb-4">
+            <label class="form-label">Instagram Password</label>
+            <input type="password" name="password" class="form-control" placeholder="Password" required>
+            <small class="text-muted">🔒 Sirf aapke device par, kahi nahi jayega</small>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Connect Instagram & Start 🚀</button>
+    </form>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
